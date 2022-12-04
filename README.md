@@ -126,3 +126,90 @@ now we should see this in our console.
 ![alt test](images/06-test.png)
 
 lets commit what we have so far, and we'll continue in the next branch.
+
+## branch 2
+
+lets get rid of this code, but we'll come back to it later
+
+```js
+const a = {
+  b: {
+    c: 'my code',
+  },
+};
+
+const appendString = (obj) => obj.b.c + ' works properly';
+const result = appendString(a);
+console.log(result);
+```
+
+now lets add some functionality to this maybe character so we can actually start to do things
+
+```js
+const maybe = (x) => ({
+  isNothing: () => isNullOrUndef(x),
+  extract: () => x,
+  map: (f) => (!isNullOrUndef(x) ? Maybe.just(f(x)) : Maybe.nothing()),
+});
+```
+
+so when we map, if there is something thats mappable, we just return a new maybe and execute the map function of the value that the maybe is holding for us. if the value inside the maybe cant be mapped, we just return a nothing, so this way, nothing ever breaks
+
+now let's modify our testing like so:
+
+```js
+const maybeNumberOne = Maybe.just(1);
+const mappedJust = maybeNumberOne.map((x) => x + 1);
+console.log(mappedJust.extract());
+
+const maybeNumberTwo = Maybe.nothing();
+const mappedNothing = maybeNumberTwo.map((x) => x + 1);
+console.log(mappedNothing.extract());
+```
+
+and then lets remove this code
+
+```js
+console.log('maybe.just is nothing?', maybeNumberOne.isNothing());
+console.log('maybe.nothing is nothing?', maybeNumberTwo.isNothing());
+```
+
+now, we should see this in the console:
+
+![alt test](images/07-test.png)
+
+so, when we mapped over the first maybe that was holding a 1, we just added 1 to it, but when we mapped over the second maybe that was holding nothing, nothing broke. all is well in the world.
+
+now that we seen that we can map, we can bring back in a version of our origin problem and see how maybe solves that problem of things blowing up.
+
+```js
+const a = {
+  b: {
+    c: 'my code',
+  },
+};
+
+const maybeA = Maybe.just(a)
+  .map((a) => a.b)
+  .map((b) => b.c)
+  .map((c) => c + ' works perfectly')
+  .extract();
+
+console.log(maybeA);
+```
+
+now your console should be printing our that you code works perfectly again, and we can run our tests where we remove c
+
+```js
+const a = {
+  b: {},
+};
+```
+
+you should just see null in the console, and now if we remove b
+
+```js
+const a = {};
+```
+
+still just getting null, and we know from previously, that this would have blown up our console.
