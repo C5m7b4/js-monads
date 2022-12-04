@@ -34,3 +34,13 @@ const badInput = Maybe.just({});
 
 console.log(appendToC(goodInput).extract());
 console.log(appendToC(badInput).extract());
+
+import { data } from './data';
+import { formatMoney } from './utils';
+
+const maybeData = Maybe.just(data)
+  .map((x) => x.filter((i) => i.dept === 32))
+  .map((x) => x.filter((i) => i.price > 2))
+  .map((x) => x.map((i) => ({ ...i, price: formatMoney(i.price) })))
+  .extract();
+console.log(maybeData);
