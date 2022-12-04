@@ -11,18 +11,20 @@ child.innerHTML = 'Hello';
 main.appendChild(child);
 root.appendChild(main);
 
-const a = {
-  b: {
-    c: 'my code',
-  },
-};
-
-const appendString = (obj) => obj.b.c + ' works properly';
-const result = appendString(a);
-console.log(result);
-
 const maybeNumberOne = Maybe.just(1);
-const maybeNumberTwo = Maybe.nothing();
+const mappedJust = maybeNumberOne.map((x) => x + 1);
+console.log(mappedJust.extract());
 
-console.log('maybe.just is nothing?', maybeNumberOne.isNothing());
-console.log('maybe.nothing is nothing?', maybeNumberTwo.isNothing());
+const maybeNumberTwo = Maybe.nothing();
+const mappedNothing = maybeNumberTwo.map((x) => x + 1);
+console.log(mappedNothing.extract());
+
+const a = {};
+
+const maybeA = Maybe.just(a)
+  .map((a) => a.b)
+  .map((b) => b.c)
+  .map((c) => c + ' works perfectly')
+  .extract();
+
+console.log(maybeA);
