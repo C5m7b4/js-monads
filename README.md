@@ -727,3 +727,39 @@ const maybeData = Maybe.just(data)
   .extract();
 console.log(maybeData);
 ```
+
+![alt price](images/013-price.png)
+
+let fix that price as well. to do this, we are going to create a file called utils.js and add this function to it:
+
+```js
+export const formatMoney = (x) => {
+  x = x.toString();
+  const pos = x.indexOf('.');
+  const left = x.substring(0, pos);
+  let right = x.substring(pos + 1);
+  if (right.length === 1) {
+    right = right + '0';
+  }
+  return `${left}.${right}`;
+};
+```
+
+now we can add this to our mapping
+
+```js
+import { formatMoney } from './utils';
+
+const maybeData = Maybe.just(data)
+  .map((x) => x.filter((i) => i.dept === 32))
+  .map((x) => x.filter((i) => i.price > 2))
+  .map((x) => x.map((i) => ({ ...i, price: formatMoney(i.price) })))
+  .extract();
+console.log(maybeData);
+```
+
+now, if we look at our items, all looks good:
+
+![alt good](images/014-good.png)
+
+so, thats basically how I  would use this. I can easily read the function and tell exactly what is doing. for example, if I thought that the item had a dept and it didnt, then normally that blows up my code, but if its not there in this scenario, its not a problem. 
