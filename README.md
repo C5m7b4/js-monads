@@ -763,3 +763,78 @@ now, if we look at our items, all looks good:
 ![alt good](images/014-good.png)
 
 so, thats basically how I  would use this. I can easily read the function and tell exactly what is doing. for example, if I thought that the item had a dept and it didnt, then normally that blows up my code, but if its not there in this scenario, its not a problem. 
+
+## branch 7
+
+Now we are going to create an api and see what it looks like to get data from our api. lets bring up our terminal and run this command:
+
+First, though, we want to install a plugin in vscode, so go to the extensions and install this plugin:
+
+![alt plugin](images/025-plugin.png)
+
+```js
+dotnet new webapi -n myapi
+```
+
+that should create a new folder in our project called myapi
+
+![alt structure](images/020-structure.png)
+
+Now let's open this up in vscode and make some changes to it
+
+what you should see is a prompt at the bottom of the screen asking you this
+
+![alt prompt](images/021-prompt.png)
+
+You should definately press yes. This will allow us to debug our code property with swagger to make sure that it all works.
+
+The first thing we are going to need to do is make sure this app will run. Lets open the debugger:
+
+![alt debugger](images/022-debugger.png)
+
+This is found in the menu on the left of the screen in vscode. If we run the debugger:
+
+![alt debugger](images/023-debug.png)
+
+if we run this debugger, we get a rather confusing web page:
+
+![alt nothing](images/024-nothing.png)
+
+but if we navigate to the swagger part, we'll start to see something amazing:
+
+![alt swagger](images/024-swagger.png)
+
+Now this is nice to see, but how can we use it?. We'll cover that now.
+
+Let's make sure that we have SQL or SQLExpress installed. You can find a download [link here](https://www.microsoft.com/en-us/download/details.aspx?id=101064)
+
+Once you have all that installed, let's open SSMS andcreate a new database
+
+![alt ssms](images/026-ssms.png)
+
+![alt new](images/027-new.png)
+
+![alt new-db](images/029-new-db.png)
+
+then press ok to create the new database
+
+now, lets create a new table
+
+![alt new-table](images/030-new-table.png)
+
+I like to always add an id with the identity specification enabled
+
+![alt id](images/031-id.png)
+
+we are going to fill out the table like so:
+
+![alt table](images/033-table.png)
+
+save the table and name it products
+
+![alt save-table](images/034-save-table.png)
+
+you may have to right click on tables and select refresh and then your db structure should look like this:
+
+![alt structure](images/035-db-structure.png)
+
