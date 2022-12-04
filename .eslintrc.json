@@ -11,7 +11,8 @@
       "react/prop-types": 0,
       "react/react-in-jsx-scope":0,
       "no-console": 0,
-      "no-debugger": 1
+      "no-debugger": 1,
+      "no-unused-vars": 0
   },
   "plugins":[
       "react", "import", "jsx-a11y"
