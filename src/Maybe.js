@@ -9,4 +9,8 @@ const maybe = (x) => ({
 export const Maybe = {
   just: maybe,
   nothing: () => maybe(null),
+  chain:
+    (...fns) =>
+    (x) =>
+      fns.reduce((y, f) => y.map(f), x),
 };

@@ -273,3 +273,101 @@ that was just an example, but the code still works fine:
 
 Now, I'm not the biggest fan of this because for me, this might look hard to read. we know that Maybe is holding an a, but a year from now, this might confuse us when we come back to this code. I promise, I will come back and show you an acceptable and much more reabable way, but I figured some people would like this approach.
 
+## branch 4
+
+now, lets add a function that can add a composable feel to our maybes. We'll see what composable in later, and I probably should have shown that first, but we are winging this so, that that. here is our new maybe function
+
+```js
+export const Maybe = {
+  just: maybe,
+  nothing: () => maybe(null),
+  chain: (...fns) => (x) => fns.reduce((y, f) => y.map(f), x)
+};
+```
+
+now lets change our test code:
+
+```js
+const appendToC = Maybe.chain(prop('b'), prop('c'), append(' works still'));
+
+const goodInput = Maybe.just({
+  b: {
+    c: 'my code',
+  },
+});
+
+const badInput = Maybe.just({});
+
+console.log(appendToC(goodInput).extract());
+console.log(appendToC(badInput).extract());
+```
+
+just for posteritys sake, your index.js should look liks this now:
+
+```js
+console.log('you are ready to start coding...');
+import { Maybe } from './Maybe';
+
+const root = document.createElement('div');
+root.id = 'root';
+document.body.appendChild(root);
+
+const main = document.createElement('div');
+const child = document.createElement('p');
+child.innerHTML = 'Hello';
+main.appendChild(child);
+root.appendChild(main);
+
+const maybeNumberOne = Maybe.just(1);
+const mappedJust = maybeNumberOne.map((x) => x + 1);
+console.log(mappedJust.extract());
+
+const maybeNumberTwo = Maybe.nothing();
+const mappedNothing = maybeNumberTwo.map((x) => x + 1);
+console.log(mappedNothing.extract());
+
+const prop = (propName) => (obj) => obj[propName];
+const append = (appendee) => (appendix) => appendix + appendee;
+
+const appendToC = Maybe.chain(prop('b'), prop('c'), append(' works still'));
+
+const goodInput = Maybe.just({
+  b: {
+    c: 'my code',
+  },
+});
+
+const badInput = Maybe.just({});
+
+console.log(appendToC(goodInput).extract());
+console.log(appendToC(badInput).extract());
+
+```
+
+and your Maybe.js should look like this:
+
+```js
+const isNullOrUndef = (v) => v === null || typeof v === 'undefined';
+
+const maybe = (x) => ({
+  isNothing: () => isNullOrUndef(x),
+  extract: () => x,
+  map: (f) => (!isNullOrUndef(x) ? Maybe.just(f(x)) : Maybe.nothing()),
+});
+
+export const Maybe = {
+  just: maybe,
+  nothing: () => maybe(null),
+  chain:
+    (...fns) =>
+    (x) =>
+      fns.reduce((y, f) => y.map(f), x),
+};
+
+```
+
+just wanted to clear that up. now our console should look like this:
+
+![alt still-works](images/010-still-works.png)
+
+i think this is pretty dope all the way through. hopefully this was all a good understanding of what you can really do with this wil actual real data, but if not, we'll look at that too in the next branch

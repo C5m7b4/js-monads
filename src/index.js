@@ -22,18 +22,15 @@ console.log(mappedNothing.extract());
 const prop = (propName) => (obj) => obj[propName];
 const append = (appendee) => (appendix) => appendix + appendee;
 
-const a = {
+const appendToC = Maybe.chain(prop('b'), prop('c'), append(' works still'));
+
+const goodInput = Maybe.just({
   b: {
     c: 'my code',
   },
-};
+});
 
-const maybeA = Maybe.just(a)
-  .map(prop('b'))
-  .map(prop('c'))
-  .map(append(' works perfectly again'))
-  .extract();
+const badInput = Maybe.just({});
 
-console.log(maybeA);
-
-// console.log(prop('b')(a));
+console.log(appendToC(goodInput).extract());
+console.log(appendToC(badInput).extract());
