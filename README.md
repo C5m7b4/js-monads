@@ -371,3 +371,359 @@ just wanted to clear that up. now our console should look like this:
 ![alt still-works](images/010-still-works.png)
 
 i think this is pretty dope all the way through. hopefully this was all a good understanding of what you can really do with this wil actual real data, but if not, we'll look at that too in the next branch
+
+## branch 5
+
+i know so far, we have written everything from scratch and thats what I like to see, but now, i have to be that guy and ask that you copy some fake data from this repo. grab the data.js file and put it in your local project. theres no need for you to type all this out, or you can go rambo and create your own data and try to follow along like that.
+
+here is the data:
+
+```js
+export const data = [
+  {
+    upc: '4011',
+    description: 'bananas',
+    dept: 5,
+    deptDescription: 'Produce',
+    category: 11,
+    categoryDescription: 'produce',
+    price: 0.69,
+    qty: 1,
+    isWeightRequired: false,
+    pack: 'each',
+    tprPrice: 0,
+    tprStartDate: '',
+    tprEndDate: '',
+    vendorId: 'PROD',
+    vendorCode: 425794,
+    uom: 'C',
+    baseCost: 0.5,
+    case: 1,
+  },
+  {
+    upc: '00000000000117',
+    description: 'SnapCrack Treats ',
+    dept: 32,
+    deptDescription: 'Soda/Candy',
+    category: 4,
+    categoryDescription: 'CANDY & GUM',
+    price: 1.1,
+    qty: 1,
+    isWeightRequired: false,
+    pack: 'each',
+    tprPrice: 1.05,
+    tprStartDate: '5/8/2022',
+    tprEndDate: '5/14/2022',
+    vendorId: 'ABC',
+    vendorCode: 325794,
+    uom: 'C',
+    baseCost: 0.99,
+    case: 1,
+  },
+  {
+    upc: '00000000000118',
+    description: 'Twizzlers',
+    dept: 32,
+    deptDescription: 'Soda/Candy',
+    category: 4,
+    categoryDescription: 'CANDY & GUM',
+    price: 2.65,
+    qty: 1,
+    isWeightRequired: false,
+    pack: 'each',
+    tprPrice: 1.89,
+    tprStartDate: '9/1/2022',
+    tprEndDate: '9/30/2022',
+    vendorId: 'ABC',
+    vendorCode: 325694,
+    uom: 'C',
+    baseCost: 1.99,
+    case: 1,
+  },
+  {
+    upc: '00000000000119',
+    description: 'Rolos',
+    dept: 32,
+    deptDescription: 'Soda/Candy',
+    category: 4,
+    categoryDescription: 'CANDY & GUM',
+    price: 1.79,
+    qty: 1,
+    isWeightRequired: false,
+    pack: 'each',
+    tprPrice: 1.69,
+    tprStartDate: '9/1/2022',
+    tprEndDate: '9/30/2022',
+    vendorId: 'ABC',
+    vendorCode: 325793,
+    uom: 'C',
+    baseCost: 1.69,
+    case: 1,
+  },
+  {
+    upc: '00000000000120',
+    description: 'Gummie Bears',
+    dept: 32,
+    deptDescription: 'Soda/Candy',
+    category: 4,
+    categoryDescription: 'CANDY & GUM',
+    price: 2.1,
+    qty: 1,
+    isWeightRequired: false,
+    pack: 'each',
+    tprPrice: 1.69,
+    tprStartDate: '',
+    tprEndDate: '',
+    vendorId: 'ABC',
+    vendorCode: 325694,
+    uom: 'C',
+    baseCost: 2.05,
+    case: 1,
+  },
+  {
+    upc: '0006414428243',
+    description: 'ROTEL DC TOM/GR CHL ',
+    dept: 1,
+    deptDescription: 'Grocery',
+    category: 3,
+    categoryDescription: 'BAKING NEEDS',
+    price: 1.49,
+    qty: 1,
+    isWeightRequired: false,
+    pack: 'each',
+    tprPrice: 1.29,
+    tprStartDate: '4/13/2022',
+    tprEndDate: '9/1/2022',
+    vendorId: '',
+    vendorCode: null,
+    uom: '',
+    baseCost: 0,
+    case: 1,
+  },
+  {
+    upc: '0006414428263',
+    description: 'ROTEL MLD TOM GR CHL 10 OZ',
+    dept: 1,
+    deptDescription: 'Grocery',
+    category: 3,
+    categoryDescription: 'BAKING NEEDS',
+    price: 1.49,
+    qty: 1,
+    isWeightRequired: false,
+    pack: 'each',
+    tprPrice: 1.29,
+    tprStartDate: '4/13/2022',
+    tprEndDate: '9/1/2022',
+    vendorId: '',
+    vendorCode: null,
+    uom: '',
+    baseCost: 0,
+    case: 1,
+  },
+  {
+    upc: '0006414428266',
+    description: 'ROTEL X HOT DC TOM 10 OZ',
+    dept: 1,
+    deptDescription: 'Grocery',
+    category: 3,
+    categoryDescription: 'BAKING NEEDS',
+    price: 1.49,
+    qty: 1,
+    isWeightRequired: false,
+    pack: 'each',
+    tprPrice: 1.29,
+    tprStartDate: '4/13/2022',
+    tprEndDate: '9/1/2022',
+    vendorId: '',
+    vendorCode: null,
+    uom: '',
+    baseCost: 0,
+    case: 1,
+  },
+  {
+    upc: '0001760008102',
+    description: 'CASA TACO SHELLS 4.5 OZ',
+    dept: 1,
+    deptDescription: 'Grocery',
+    category: 9,
+    categoryDescription: 'COOKIES - CRACKERS - MISCELLAN',
+    price: 2.19,
+    qty: 1,
+    isWeightRequired: false,
+    pack: 'each',
+    tprPrice: 0,
+    tprStartDate: '0',
+    tprEndDate: '0',
+    vendorId: '00050',
+    vendorCode: 112345,
+    uom: 'U',
+    baseCost: 1.99,
+    case: 1,
+  },
+  {
+    upc: '0001760008120',
+    description: 'CASA TACO DINNER 9.75 OZ',
+    dept: 1,
+    deptDescription: 'Grocery',
+    category: 9,
+    categoryDescription: 'COOKIES - CRACKERS - MISCELLAN',
+    price: 2.79,
+    qty: 1,
+    isWeightRequired: false,
+    pack: 'each',
+    tprPrice: 0,
+    tprStartDate: '0',
+    tprEndDate: '0',
+    vendorId: '00050',
+    vendorCode: 112344,
+    uom: 'U',
+    baseCost: 2.59,
+    case: 1,
+  },
+  {
+    upc: '0001760008122',
+    description: 'CASA TACO SEASONING 1.25 OZ',
+    dept: 1,
+    deptDescription: 'Grocery',
+    category: 9,
+    categoryDescription: 'COOKIES - CRACKERS - MISCELLAN',
+    price: 0.79,
+    qty: 1,
+    isWeightRequired: false,
+    pack: 'each',
+    tprPrice: 0,
+    tprStartDate: '0',
+    tprEndDate: '0',
+    vendorId: '00050',
+    vendorCode: 112343,
+    uom: 'U',
+    baseCost: 0.59,
+    case: 1,
+  },
+  {
+    upc: '0001760008557',
+    description: 'CASA TACO SALAD SEAS 1.25 OZ',
+    dept: 1,
+    deptDescription: 'Grocery',
+    category: 9,
+    categoryDescription: 'COOKIES - CRACKERS - MISCELLAN',
+    price: 1.69,
+    qty: 1,
+    isWeightRequired: false,
+    pack: 'each',
+    tprPrice: 0,
+    tprStartDate: '0',
+    tprEndDate: '0',
+    vendorId: '00050',
+    vendorCode: 112342,
+    uom: 'U',
+    baseCost: 1.29,
+    case: 1,
+  },
+  {
+    upc: '0020000400000',
+    description: 'Carnitas',
+    dept: 9,
+    deptDescription: 'Meat',
+    category: 6198,
+    categoryDescription: 'MISC SIDE MEATS',
+    price: 1.99,
+    qty: 1,
+    isWeightRequired: true,
+    pack: 'each',
+    tprPrice: 0,
+    tprStartDate: '0',
+    tprEndDate: '0',
+    vendorId: '00050',
+    vendorCode: 221456,
+    uom: 'U',
+    baseCost: 0.99,
+    case: 1,
+  },
+  {
+    upc: '0020000600000',
+    description: 'Barbacoa',
+    dept: 9,
+    deptDescription: 'Meat',
+    category: 6198,
+    categoryDescription: 'MISC SIDE MEATS',
+    price: 3.59,
+    qty: 1,
+    isWeightRequired: true,
+    pack: 'each',
+    tprPrice: 0,
+    tprStartDate: '0',
+    tprEndDate: '0',
+    vendorId: '00050',
+    vendorCode: 190263,
+    uom: 'U',
+    baseCost: 2.59,
+    case: 1,
+  },
+];
+
+```
+
+as you can see, these are just a bunch of grocery items that you might expect to get back from an api request to a remote server.
+
+let see how we can manipulate this data. lets just first bring the data into a maybe and make sure that works and then we can build on top of that.
+
+```js
+import { data } from './data';
+
+const maybeData = Maybe.just(data).extract();
+console.log(maybeData);
+```
+
+I hope you think thats cool, because I do, we have all the data in the console
+
+![alt data](images/011-data.png)
+
+now, lets really do something with it. if we look at this data, then maybe we want everything in dept 32 that has a price of more than 2.00. lets see how that looks, shall we:
+
+```js
+const maybeData = Maybe.just(data)
+  .map((x) => x.filter((i) => i.dept === 32))
+  .extract();
+console.log(maybeData);
+```
+
+sweet, now we are down to 4 items:
+
+![alt four](images/012-four.png)
+
+now lets get the items that have a price of more than 2 dollars:
+
+```js
+const maybeData = Maybe.just(data)
+  .map((x) => x.filter((i) => i.dept === 32))
+  .map((x) => x.filter((i) => i.price > 2))
+  .extract();
+console.log(maybeData);
+```
+
+even cooler, now we are down to 2 items. lets also talk really quickly about, what if we actually do not get data from the server. what does that look like:
+
+```js
+const maybeData = Maybe.just(null)
+  .map((x) => x.filter((i) => i.dept === 32))
+  .map((x) => x.filter((i) => i.price > 2))
+  .extract();
+console.log(maybeData);
+```
+
+notice that we just get a null, we have run two map functions over the input to the maybe and nothing broke. if we tried to run a filter command with undefined as the source of the data to be filtered, we would have a red console. what does that look like exactly:
+
+```js
+console.log(null.filter((i) => i.dept === 32));
+```
+
+not such a great outcome, so , let's put our data back in and look at these items that we have so far: oh, and remove that last line for testing of course
+
+```js
+const maybeData = Maybe.just(data)
+  .map((x) => x.filter((i) => i.dept === 32))
+  .map((x) => x.filter((i) => i.price > 2))
+  .extract();
+console.log(maybeData);
+```
