@@ -19,12 +19,21 @@ const maybeNumberTwo = Maybe.nothing();
 const mappedNothing = maybeNumberTwo.map((x) => x + 1);
 console.log(mappedNothing.extract());
 
-const a = {};
+const prop = (propName) => (obj) => obj[propName];
+const append = (appendee) => (appendix) => appendix + appendee;
+
+const a = {
+  b: {
+    c: 'my code',
+  },
+};
 
 const maybeA = Maybe.just(a)
-  .map((a) => a.b)
-  .map((b) => b.c)
-  .map((c) => c + ' works perfectly')
+  .map(prop('b'))
+  .map(prop('c'))
+  .map(append(' works perfectly again'))
   .extract();
 
 console.log(maybeA);
+
+// console.log(prop('b')(a));

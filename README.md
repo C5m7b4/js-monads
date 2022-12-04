@@ -213,3 +213,63 @@ const a = {};
 ```
 
 still just getting null, and we know from previously, that this would have blown up our console.
+
+## branch 3
+
+i wanted to start a new branch here because we are going to be modifying our example to use something called point free. this is just going to be a way of passing higher order functions so that the mapping process will automatically feed the results of the previous function into the next function. lets take a look
+
+in our idex.js file, lets add this code near the top
+
+```js
+const prop = (propName) => (obj) => obj[propName];
+const append = (appendee) => (appendix) => appendix + appendee;
+```
+
+so, lets talk about these
+
+- prop is a function that takes a propname and returns a function that takes an object and returns a function that fetches the property of that object. so if we have an object that looks like our a object we have been using, then calling
+
+```js
+console.log(prop('b')(a));
+```
+
+this should print:
+
+![alt code](images/08-my-code.png)
+
+lets clarify one thing right here. if you console is throwing up errors, thats probably because eslint is telling you that are have defined a variable and are not using it. we can change that one of two ways, you can either comment out the line declaring the append function because we are not using it or we can add something to eslintrs.json to fix this. open up the eslintrc.json file and make this modification:
+
+```js
+      "react/prop-types": 0,
+      "react/react-in-jsx-scope":0,
+      "no-console": 0,
+      "no-debugger": 1,
+      "no-unused-vars": 0
+```
+
+the no-unused-vars is the one we are adding. Now you will have to kill webpack and then run an npm start again, but now your console should be clean even with the unused variable declaration.
+
+now everything should be good
+
+- the append function takes in an appendee and returns a function that expects appendix and then just returns the concatenation of the two. so now we can put these guys to use
+
+```js
+const maybeA = Maybe.just(a)
+  .map(prop('b'))
+  .map(prop('c'))
+  .map(append(' works perfectly again'))
+  .extract();
+```
+
+we can remove the test line for prop
+
+```js
+// console.log(prop('b')(a));
+```
+
+that was just an example, but the code still works fine:
+
+![alt works](images/09-works.png)
+
+Now, I'm not the biggest fan of this because for me, this might look hard to read. we know that Maybe is holding an a, but a year from now, this might confuse us when we come back to this code. I promise, I will come back and show you an acceptable and much more reabable way, but I figured some people would like this approach.
+
