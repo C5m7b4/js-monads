@@ -1104,3 +1104,143 @@ now lets try the same thing with testdb
 ![alt testdb](images/045-tetdb.png)
 
 we are going to close this branch with that and in the next branch, we'll create an actual endpoint to use and wire that up
+
+## branch 9
+
+before we can move on, we need to introduce another function which we will come back later and work with more, but we also need it for the next monad, the Task monad. Let's add this code to our utils.js file
+
+```js
+export const compose =
+  (...fns) =>
+  (x) =>
+    fns.reduce((y, f) => f(y), x);
+```
+
+like i said, we'll come back and play with this more later. Let's create a file called Task.js and let's add this code to it:
+
+```js
+import { compose } from './utils';
+
+export const identity = (x) => x;
+
+export const Task = (fork) => ({
+  fork,
+  map: (f) => Task((err, ok) => fork(err, compose(f, ok))),
+  chain: (f) => Task((err, ok) => fork(err, (x) => f(x).fork(err, ok))),
+  unwrap: () => this.chain(identity),
+});
+
+Task.of = (x) => (_, ok) => ok(x);
+```
+
+let's play around with this monad a little because honestly, I'm not totally sure that I am a fan of it yet, so I need some convincing. lets say for example, that we add this code to our index.js
+
+```js
+console.log('********************* tasks');
+import { Task } from './Task';
+
+Task.test = (x) =>
+  Task((err, ok) => {
+    try {
+      return ok([1, 2, 3, 4, 5]);
+    } catch (e) {
+      return err(e);
+    }
+  });
+
+const processData = (data) => data.map((x) => x + 1);
+
+const testTask = Task.test(5).map(processData);
+
+testTask.fork(console.err, (x) => {
+  console.log('x', x);
+});
+```
+
+I was able to make that work, but like I said, not a big fan. I did find an example online that might seem a little more useful. lets try adding this code to our Task.js file
+
+```js
+Task.http = (method, url, body) => {
+  return Task((err, ok) => {
+    const r = new XMLHttpRequest();
+    r.open(method, url);
+
+    r.addEventListener('readystatechange', () => {
+      switch (r.readyState) {
+        case 0:
+          console.log('awaiting send...');
+          break;
+        case 1:
+          console.log('opened request');
+          break;
+        case 2:
+          console.log('header received');
+          break;
+        case 3:
+          console.log('awaiting data');
+          break;
+        case 4:
+          if (r.status === 200) {
+            return ok(JSON.parse(r.responseText));
+          } else {
+            console.warn(`weird status: ${r.status}`);
+          }
+          break;
+        default:
+          console.warn(`unknown ready state: ${r.readyState}`);
+          break;
+      }
+    });
+
+    r.onError = (e) => {
+      return err(e);
+    };
+
+    r.send(body);
+  });
+};
+```
+
+we can use it like this initially:
+
+```js
+const URL = 'https://jsonplaceholder.typicode.com/users/1/todos';
+const reverseById = (x) => x.sort((a, b) => b.id - a.id);
+const todos = Task.http('GET', URL).map(reverseById);
+
+todos.fork(console.error, (xs) => {
+  console.log('xs', xs);
+});
+```
+
+this is not too bad, now lets fire up our api and try to make a request to the test endpoint
+
+```js
+const myData = Task.http('GET', 'https://localhost:7237/test/testservice');
+
+myData.fork(console.warn, (x) => console.log(x));
+```
+
+we do run into a small problem with this one though:
+
+![alt problem](images/046-problem.png)
+
+let stop the api and go into the Program.cs file and add this
+
+```js
+builder.Services.AddSwaggerGen();
+builder.Services.AddCors(p => p.AddPolicy("*", builder =>
+{
+  builder.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
+}));
+```
+
+then under the app.Environment.IsDevelopemen add this
+
+```js
+app.UseCors("*");
+```
+
+now, fire up your api again by pressing f5 and refresh your browser and you should see that you get a response back. Now we're actually getting someplace, but let's see what all this can do for us really.
+
+

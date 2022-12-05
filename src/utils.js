@@ -1,3 +1,8 @@
+export const compose =
+  (...fns) =>
+  (x) =>
+    fns.reduce((y, f) => f(y), x);
+
 export const formatMoney = (x) => {
   x = x.toString();
   const pos = x.indexOf('.');

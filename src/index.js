@@ -44,3 +44,35 @@ const maybeData = Maybe.just(data)
   .map((x) => x.map((i) => ({ ...i, price: formatMoney(i.price) })))
   .extract();
 console.log(maybeData);
+
+console.log('********************* tasks');
+import { Task } from './Task';
+
+Task.test = (x) =>
+  Task((err, ok) => {
+    try {
+      return ok([1, 2, 3, 4, 5]);
+    } catch (e) {
+      return err(e);
+    }
+  });
+
+const processData = (data) => data.map((x) => x + 1);
+
+const testTask = Task.test(5).map(processData);
+
+testTask.fork(console.err, (x) => {
+  console.log('x', x);
+});
+
+const URL = 'https://jsonplaceholder.typicode.com/users/1/todos';
+const reverseById = (x) => x.sort((a, b) => b.id - a.id);
+const todos = Task.http('GET', URL).map(reverseById);
+
+todos.fork(console.error, (xs) => {
+  console.log('xs', xs);
+});
+
+const myData = Task.http('GET', 'https://localhost:7237/test/testdb');
+
+myData.fork(console.warn, (x) => console.log('data', x));
