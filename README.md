@@ -1243,4 +1243,10 @@ app.UseCors("*");
 
 now, fire up your api again by pressing f5 and refresh your browser and you should see that you get a response back. Now we're actually getting someplace, but let's see what all this can do for us really.
 
+![alt success](images/047-success.png)
 
+lets call the testdb endpoint
+
+![alt success](images/048-success.png)
+
+these were both pretty simple get requests so we know delete requests will be pretty simple as well. What if we want to send a POST or PUT request were we need to send a body. let's finish up this branch and we'll explore a little more with those.
