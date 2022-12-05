@@ -907,3 +907,200 @@ you should see this:
 ![alt products](images/036-products.png)
 
 we are going to stop here for now and in the next branch, we'll setup some security and hook our database into our api that we created earlier
+
+## branch 8
+
+lets setup a user in our sql database so we can use that userid in our api:
+
+![alt security](images/037-security.png)
+
+![alt new-user](images/038-new-user.png)
+
+![alt mappings](images/039-mappings.png)
+
+one thing we need to check is that you have your server setup for mixed mode. go to the properties of your sql server
+
+![alt properties](images/040-properties.png)
+
+![alt mixed-mode](images/041-mixed-mode.png)
+
+if you need to change this you will have to restart your sql server. if this setting is ot set to this mode, then none of the things we are going to do next will work
+
+double check that you can login and get to your database tables using this new login
+
+![alt login](images/042-login.png)
+
+Now, lets open up our api project in vscode and add a file to the root called DbUtils.cs
+
+```js
+namespace myapi;
+
+public static class DbUtils
+{
+  public static string GetConnectionString(IConfiguration config)
+  {
+    string server = config["DB:server"];
+    string database = config["DB:database"];
+    string username = config["DB:username"];
+    string password = config["DB:password"];
+    string connectionString = "Data Source=" + server + ";Initial Catalog=" + database + ";User Id=" + username + ";Password=" + password + ";TrustServerCertificate=true";
+    return connectionString;
+  }
+}
+```
+
+there are a few more things that we have to do to get this to work. lets update our config file, so open the appsettings.json file and add this section:
+
+```js
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*",
+  "DB":{
+    "server":"C5Laptop",
+    "database":"monads",
+    "username":"monads",
+    "password":"monads"
+  }
+}
+```
+
+normally I would encrypt all of this, but we will leave that for another day.Obviously, you will need to use the name of your server, and other stuff if you created it differently.
+
+now we need to install a package into  our api so we can access sql server. bring up the terminal and type this command:
+
+```js
+dotnet add package Microsoft.Data.SqlClient
+```
+
+now, we should actually be able to get something started. lets create a new controller in the controllers folder called TestController.cs
+
+```js
+namespace myapi.Controllers;
+
+public class TestController: ControllerBase
+{
+  
+}
+```
+
+at this point, you will probably see that ControllerBase has a red squiggly under it so put your cursor inside that work and press CTRL-.
+
+![alt import](images/043-import.png)
+
+click on that and it will import the proper using statement for your. now lets finish our class
+
+```js
+using Microsoft.AspNetCore.Mvc;
+
+namespace myapi.Controllers;
+
+[ApiController]
+[Route("test")]
+public class TestController: ControllerBase
+{
+  private readonly IConfiguration _config;
+
+  public TestController(IConfiguration config)
+  {
+    _config = config;
+  }
+}
+```
+
+after you add the _config = config, you can put your cursor in the _config work and press CTRL-. to create the private read-only variable.
+
+now lets create two routes to test our service and db connection: now the whole file should look like this
+
+```js
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
+
+namespace myapi.Controllers;
+
+[ApiController]
+[Route("test")]
+public class TestController : ControllerBase
+{
+  private readonly IConfiguration _config;
+
+  public TestController(IConfiguration config)
+  {
+    _config = config;
+  }
+
+  [HttpGet]
+  [Route("testservice")]
+  public ActionResult TestService()
+  {
+    try
+    {
+      return Ok(new
+      {
+        error = 0,
+        success = true,
+        msg = "Test success"
+      });
+    }
+    catch (System.Exception ex)
+    {
+      return Ok(new
+      {
+        error = 1,
+        success = false,
+        msg = ex.Message
+      });
+    }
+  }
+
+  [HttpGet]
+  [Route("testdb")]
+  public ActionResult TestDb()
+  {
+    try
+    {
+      using (SqlConnection conn = new SqlConnection(DbUtils.GetConnectionString(_config)))
+      {
+        conn.Open();
+        conn.Close();
+      }
+
+      return Ok(new
+      {
+        error = 0,
+        success = true,
+        msg = "Test db success"
+      });
+    }
+    catch (System.Exception ex)
+    {
+      return Ok(new
+      {
+        error = 1,
+        success = false,
+        msg = ex.Message
+      });
+    }
+  }
+}
+```
+
+we are ready to test this thing finally
+
+press F5 and then navigate to the /swagger route and it should look like this:
+
+![alt swagger](images/044-swagger.png)
+
+open up the test and click 'Try it out', then press execute and you should see this
+
+![alt success](images/044-success.png)
+
+now lets try the same thing with testdb
+
+![alt testdb](images/045-tetdb.png)
+
+we are going to close this branch with that and in the next branch, we'll create an actual endpoint to use and wire that up
